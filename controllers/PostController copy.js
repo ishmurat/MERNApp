@@ -159,3 +159,34 @@ export const remove = async (req, res) => {
 };
 
 
+export const update = async (req, res) => {
+    try {
+        const postId = req.params.id;
+
+        const updatePost = await PostModel.updateOne(
+            { _id: postId },
+            {
+                title: req.body.title,
+                text: req.body.text,
+                imageUrl: req.body.imageUrl,
+                tags: req.body.tags,
+                user: req.userId,
+            }
+        );
+
+        if (!updatePost) {
+            return res.status(404).json({
+                message: 'Статья не найдена',
+            });
+        }
+
+        res.json({
+            success: true,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            message: 'Не удалось обновить статью',
+        });
+    }
+};

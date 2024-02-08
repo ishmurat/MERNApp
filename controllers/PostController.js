@@ -79,13 +79,15 @@ export const getOne = async (req, res) => {
     }
 };
 
+//
+
 export const remove = async (req, res) => {
     try {
         const postId = req.params.id;
 
         const deletePost = await PostModel.findOneAndDelete(
             { _id: postId },
-        );
+        ).exec();
 
         if (!deletePost) {
             return res.status(404).json({
@@ -93,7 +95,9 @@ export const remove = async (req, res) => {
             });
         }
 
-        res.json(deletePost); 
+        res.json({
+            success: true,
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({
@@ -149,6 +153,34 @@ export const create = async (req, res) => {
         console.log(err);
         res.status(500).json({
             message: 'Не удалось создать статью',
+        });
+    }
+};
+
+
+
+export const update = async (req, res) => {
+    try {
+        const postId = req.params.id;
+
+       await PostModel.updateOne(
+            { _id: postId },
+            {
+                title: req.body.title,
+                text: req.body.text,
+                imageUrl: req.body.imageUrl,
+                tags: req.body.tags,
+                user: req.userId,
+            }
+        );
+
+        res.json({
+            success: true,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            message: 'Не удалось обновить статью',
         });
     }
 };
