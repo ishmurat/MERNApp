@@ -1,4 +1,5 @@
 // mongodb+srv://admin:<password>@cluster0.9fnxnck.mongodb.net/?retryWrites=true&w=majority
+// ru...
 // Chicony134...
 
 import express from "express";
@@ -23,10 +24,10 @@ app.post('/auth/login', loginValidation, UserController.login);
 app.get('/auth/me', checkAuth, UserController.getMe);
  
 app.get('/posts', PostController.getAll);
-app.get('/posts/:id', PostController.getOne);
 app.post('/posts', checkAuth, postCreateValidation, PostController.create);
-// app.get('/posts', PostController.remove);
-// app.get('/posts', PostController.update);
+app.get('/posts/:id', PostController.getOne);
+app.delete('/posts/:id', checkAuth, PostController.remove);
+// app.patch('/posts/:id', PostController.update);
 
 app.listen(4444, (err) => {
     if (err) {
